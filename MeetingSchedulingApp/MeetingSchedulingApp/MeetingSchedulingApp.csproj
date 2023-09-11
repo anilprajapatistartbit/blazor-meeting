@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\css\font-awesome\**" />
+    <Content Remove="wwwroot\css\font-awesome\**" />
+    <EmbeddedResource Remove="wwwroot\css\font-awesome\**" />
+    <None Remove="wwwroot\css\font-awesome\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="7.0.10" />
     <PackageReference Include="Npgsql" Version="7.0.4" />

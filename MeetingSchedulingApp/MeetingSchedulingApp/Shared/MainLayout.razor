@@ -3,8 +3,8 @@
 <PageTitle>MeetingSchedulingApp</PageTitle>
 
 <div class="page">
-    <div class="sidebar">
-        <NavMenu />
+    <div class="@sidebarclass">
+        <NavMenu SidebarClass="@ChangeSideBarClass" />
     </div>
 
     <main>
@@ -17,3 +17,19 @@
         </article>
     </main>
 </div>
+@code{
+    public string sidebarclass = "sidebar";
+    public bool isfull = false;
+    public void ChangeSideBarClass(bool value)
+    {
+        isfull = value;
+        if (value)
+        {
+            sidebarclass = "sidebar";
+        }
+        else
+        {
+            sidebarclass = "sidebarfull";
+        }
+    }
+}
