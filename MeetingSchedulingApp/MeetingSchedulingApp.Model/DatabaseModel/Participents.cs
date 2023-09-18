@@ -25,9 +25,9 @@ namespace MeetingSchedulingApp.Model.DatabaseModel
         public DateTime? UpdatedAt { get; set; }
 
         [ForeignKey("Meeting_Id")]
-        public Meetings? Meeting { get; set; }
+        public virtual Meetings? Meeting { get; set; }
 
         [ForeignKey("User_Id")]
-        public Users? User { get; set; }
+        public virtual Users? User { get; set; }
     }
 }

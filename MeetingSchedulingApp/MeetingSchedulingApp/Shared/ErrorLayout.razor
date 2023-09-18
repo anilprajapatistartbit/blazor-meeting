@@ -1,0 +1,32 @@
+﻿@inherits LayoutComponentBase
+
+<div>
+    <div class="w-100 text-center errorlayout">
+        <div class="error-body text-center">
+            @Body
+            <AuthorizeView>
+                <Authorized>
+                    <button class="btn btn-danger rounded-pill" @onclick="@(args=>Back(""))">
+                        Back to dashboard
+                    </button>
+                </Authorized>
+                <NotAuthorized>
+                    <button class="btn btn-danger rounded-pill" @onclick="@(args=>Back("/accountlogin"))">
+                        Login
+                    </button>
+                </NotAuthorized>
+            </AuthorizeView>
+            
+        </div>
+
+    </div>
+</div>
+@code {
+    [Inject]
+    private NavigationManager navigationManager { get; set; }
+
+    void Back(string url)
+    {
+        navigationManager.NavigateTo(url);
+    }
+}

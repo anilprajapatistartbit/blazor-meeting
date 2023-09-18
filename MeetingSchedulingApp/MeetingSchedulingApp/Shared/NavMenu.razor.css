@@ -33,8 +33,25 @@ element.style {
     align-items: center;
     line-height: 3rem;
 }
-
-
+.user-profile {
+    background: #36bdbb;
+    color: #fff;
+    height: 24px;
+    width: 24px;
+    border-radius:999px;
+}
+.user-profile-text {
+    min-width: 1px;
+    word-wrap: break-word;
+    font-size: 12px;
+    letter-spacing: .02em;
+    line-height: 1.4;
+}
+.user-profile2{
+    line-height:15px;
+    font-size:14px;
+    font-weight:400;
+}
 .nav-item {
     font-size: 0.9rem;
     padding-bottom: 0.5rem;
@@ -70,7 +87,20 @@ element.style {
     color: black;
     opacity: 1;
 }
+.toggle-btn:hover {
+    background-color: #0b2233;
+    color: white;
+}
 
+.text-container {
+    width: 100px; /* Set the width to 50px */
+    overflow: hidden; /* Hide the overflow text */
+    white-space: nowrap; /* Prevent line breaks */
+}
+
+.ellipsis {
+    text-overflow: ellipsis; /* Display ellipsis for overflow text */
+}
 @media (min-width: 641px) {
     .navbar-toggler {
         display: none;
@@ -85,3 +115,5 @@ element.style {
         opacity:1;
     }
 }
+
+

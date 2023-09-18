@@ -2105,7 +2105,7 @@ progress {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    border-radius: .25rem;
+    border-radius: 1.25rem;
     transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out
 }
 

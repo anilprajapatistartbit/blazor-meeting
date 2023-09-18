@@ -1,0 +1,47 @@
+﻿@page "/accountlogin"
+@using System.Web;
+@inject IJSRuntime js;
+<PageTitle>Login</PageTitle>
+<div class="">
+    <div class="m-auto bg-white login-container p-4">
+            <h5 class="login-heading">Log in to Meetings Scheduling</h5>
+        <p class="login-sub-heading text-secondary">if you do not have an account,please <a href="/Registration" class="register-color text-decoration-none">register</a>.</p>
+            <form class="mt-4" @onsubmit=OnLogin>
+            <input type="email" class="form-control mt-3" placeholder="Email" @bind-value="@loginmodel.Email" required>
+            <input type="password" class="form-control mt-3" placeholder="Password" @bind-value="@loginmodel.Password" required>
+            <p style="font-size:12px;" class="ms-3 mt-1">
+                <a href="" class="register-color text-decoration-none">Forgot Password ?</a>
+            </p>
+            <input type="submit" value="LOG IN" class="form-control login-btn mt-3" />
+            
+            </form>
+    </div>
+
+</div>
+
+@code {
+    MeetingSchedulingApp.Model.ApiModel.LoginModel loginmodel = new();
+    [Inject]
+    HttpClient httpClient { get; set; }
+
+    [Inject]
+    private NavigationManager navigationManager { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        loginmodel = new();
+    }
+    async Task OnLogin()
+    {
+        var response = await httpClient.PostAsJsonAsync<MeetingSchedulingApp.Model.ApiModel.LoginModel>("api/Auth/Login", loginmodel);
+        if (response.IsSuccessStatusCode)
+        {
+            var data = await response.Content.ReadFromJsonAsync<AuthRespose>();
+            if (data.isAuthenticated)
+            {
+                var url = $"/Login?email={HttpUtility.UrlEncode(data.Login.User.Email)}&name={HttpUtility.UrlEncode(data.Login.User.FirstName + " " + data.Login.User.LastName)}&id={HttpUtility.UrlEncode(data.Login.User_Id.ToString())}";
+                await js.InvokeVoidAsync("clientJsfunctions.RedirectTo", url);
+            }
+        }
+    }
+
+}

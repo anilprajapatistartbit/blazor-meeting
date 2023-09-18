@@ -23,7 +23,7 @@ namespace MeetingSchedulingApp.Model.DatabaseModel
         [Required]
         public string SaltPassword { get; set; }
 
-        public bool? IsActive { get; set; }
+        public bool? IsActive { get; set; } = true;
 
         public DateTime? CreatedAt { get; set; }
 

@@ -2,21 +2,33 @@
 
 <PageTitle>MeetingSchedulingApp</PageTitle>
 
-<div class="page">
+<AuthorizeView>
+    <Authorized>
+        <div class="page">
     <div class="@sidebarclass">
         <NavMenu SidebarClass="@ChangeSideBarClass" />
     </div>
 
     <main>
         <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+                    <a href="/logout?returnUrl=/Registration" target="_blank">Register</a>
         </div>
 
         <article class="content px-4">
-            @Body
+                    @Body
         </article>
     </main>
 </div>
+    </Authorized>
+    <NotAuthorized>
+        <div class="page-not-auth d-flex justify-content-center align-items-center">
+            <main class="">
+               @Body
+           </main>
+       </div>
+    </NotAuthorized>
+</AuthorizeView>
+
 @code{
     public string sidebarclass = "sidebar";
     public bool isfull = false;

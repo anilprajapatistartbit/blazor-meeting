@@ -1,0 +1,87 @@
+﻿@page "/Registration"
+@using System.Web;
+@inject IJSRuntime js;
+<PageTitle>Register</PageTitle>
+<div class="">
+    <div class="m-auto bg-white login-container p-4">
+        <h5 class="login-heading">Register to Meetings Scheduling App</h5>
+        <p class="login-sub-heading text-secondary">if you have already an account,please <a href="/Accountlogin" class="register-color text-decoration-none">Login</a>.</p>
+        <form class="mt-4" @onsubmit="onSumbit">
+            <div class="form-group w-100">
+                <div class="mt-2">
+                    <lagend class="lagend-register">Basic Information</lagend>
+                    <div class="row m-2 register-row">
+                        <div class="col-12 col-md-4">
+                            <input type="text" class="form-control my-3" style="border-radius:8px !important" placeholder="First Name" @bind-value="@users.FirstName" required>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <input type="text" class="form-control my-3" style="border-radius:8px !important" placeholder="Middle Name" @bind-value="@users.MiddleName">
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <input type="text" class="form-control my-3" style="border-radius:8px !important" placeholder="Last Name" @bind-value="@users.LastName" required>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <input type="date" class="form-control my-3" style="border-radius:8px !important" placeholder="Dob" @bind-value="@users.Dob" required>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <input type="email" class="form-control my-3" style="border-radius:8px !important" placeholder="Email" @bind-value="@users.Email" required>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <input type="tel" class="form-control my-3" style="border-radius:8px !important" placeholder="Phone" @bind-value="@users.Phone" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <lagend class="lagend-register">Address Information</lagend>
+                <div class="row m-2 register-row">
+                    <div class="col-12 col-md-4">
+                            <input type="text" class="form-control my-3" style="border-radius:8px !important" placeholder="Address Line 1" @bind-value="@users.AddressLine1" required>
+
+                    </div>
+                    <div class="col-12 col-md-4">
+                            <input type="text" class="form-control my-3" style="border-radius:8px !important" placeholder="Address Line 2" @bind-value="@users.AddressLine2">
+                    </div>
+                    <div class="col-12 col-md-4">
+                            <input type="text" class="form-control my-3" style="border-radius:8px !important" placeholder="City" @bind-value="@users.City" required>
+                    </div>
+                    <div class="col-12 col-md-4">
+                            <input type="text" class="form-control my-3" style="border-radius:8px !important" placeholder="State" @bind-value="@users.State" required>
+                    </div>
+                    <div class="col-12 col-md-4">
+                            <input type="text" class="form-control my-3" style="border-radius:8px !important" placeholder="Country" @bind-value="@users.Country" required>
+                    </div>
+                    <div class="col-12 col-md-4">
+                            <input type="text" class="form-control my-3" style="border-radius:8px !important" placeholder="Zip Code" @bind-value="@users.ZipCode" required>
+                    </div>
+                </div>
+                </div>
+                <input type="submit" value="REGISTER" style="border-radius:8px !important" class="form-control login-btn mt-3" />
+
+            </div>
+        </form>
+    </div>
+
+</div>
+@code {
+    public Users users = new();
+    [Inject]
+    HttpClient httpClient { get; set; }
+    [Inject]
+    private NavigationManager navigationManager { get; set; }
+    async Task onSumbit()
+    {
+        var response = await httpClient.PostAsJsonAsync<Users>("api/User",users);
+
+        if (response.IsSuccessStatusCode)
+        {
+            var data = await response.Content.ReadFromJsonAsync<AuthRespose>();
+            if (data.isAuthenticated)
+            {
+               
+                await js.InvokeVoidAsync("clientJsfunctions.RedirectTo", "/Accountlogin");
+            }
+        }
+        await js.InvokeVoidAsync("clientJsfunctions.RedirectTo", "/Accountlogin");
+    }
+
+}

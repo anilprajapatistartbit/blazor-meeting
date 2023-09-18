@@ -40,6 +40,45 @@ namespace MeetingSchedulingApp.Application.Implimentation
         }
         #endregion
 
+        #region Get
+        public async Task<Login> GetByEmail(string id)
+        {
+            try
+            {
+                return await _unitofwork.Logins.GetByExpression(s=>s.User.Email.ToLower()==id.ToLower());
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public async Task<Login> GetById_Email(string eid, int id)
+        {
+            try
+            {
+                return await _unitofwork.Logins.GetByExpression(s => s.User_Id == id && s.User.Email.ToLower() == eid.ToLower());
+
+            }
+            catch { throw; };
+        }
+       
+        #endregion
+
+        #region Update
+        public async Task<Login> Update(Login login)
+        {
+            try
+            {
+                var result = await _unitofwork.Logins.EditData(login);
+                var resultcheck = await _unitofwork.CompleteAsync();
+                return await Task.Run(() => (resultcheck) ? result : null);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        #endregion
 
         #endregion
     }

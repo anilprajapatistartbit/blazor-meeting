@@ -1,0 +1,18 @@
+﻿
+    <div class="me-1 justify-content-between align-items-center">
+    <span style="font-size:10px" class=@(Index==0 ?"":"fa-solid fa-angles-right me-1")</span><a href=@Path class=@(Active ? "disabled-link":"text-dark") style="font-size:16px"><i class="@Icon" style="font-size:16px"></i>@Text</a>
+    </div>
+
+@code {
+    [Parameter]
+    public string Path { get; set; }
+    [Parameter]
+    public string Text { get; set; }
+    [Parameter]
+    public string Icon { get; set; }
+    [Parameter]
+    public int Index { get; set; }
+    [Parameter]
+    public bool Active { get; set; }
+
+}

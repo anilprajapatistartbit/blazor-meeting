@@ -32,6 +32,7 @@ main {
     height: 3.5rem;
     display: flex;
     align-items: center;
+    box-shadow: 0px 1px 2px 0px #5654;
 }
 
     .top-row ::deep a, .top-row .btn-link {
@@ -91,4 +92,11 @@ main {
         padding-left: 2rem !important;
         padding-right: 1.5rem !important;
     }
+}
+
+
+/*****************Not Authrize******************/
+.page-not-auth {
+    background: #36bdbb;
+    height:100vh;
 }
