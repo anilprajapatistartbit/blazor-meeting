@@ -1,0 +1,95 @@
+﻿@page "/mymeetings"
+@inject AuthenticationStateProvider asp;
+@attribute [Authorize]
+<PageTitle> Change Password</PageTitle>
+
+
+<div class="card ">
+    <div class="card-header">
+
+
+        <BreadCrumb>
+            <BreadCrumbItem Icon="" Path="/" Text="Home" Index=1 Active=@false />
+            <BreadCrumbItem Icon="" Path="/mymeetings" Text="My Meetings" Index=2 Active=@true />
+        </BreadCrumb>
+
+    </div>
+    <div class="card-body mt-2 table-responsive">
+        <table class="table table-striped table-bordered table-sm">
+            <thead class="table-head">
+                <tr>
+                    <th class="th">#</th>
+                    <th class="th">Title</th>
+                    <th class="th">Location/Url</th>
+                    <th class="th">Start Date</th>
+                    <th class="th">End Date</th>
+                    <th class="th">Meeting Type</th>
+                    <th class="th">Status</th>
+                    <th class="th">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in meetings.Select((Value,i)=>(Value,i)))
+                {
+                    <tr class="align-middle">
+                        <th class="py-0">@(item.i+1)</th>
+                        <td class="py-0 td"><span>@item.Value.Title</span></td>
+                        <td class="py-0 td">
+                            @if (item.Value.Meeting_Type.ToLower() == "virtual")
+                            {
+                                <a href="@item.Value.Location" target="_blank"><i class="fa-solid fa-globe me-1 text-default"></i>@item.Value.Location</a>
+                            } 
+                            else
+                            {
+                                <a href="https://www.google.com/maps/search/@item.Value.Location" target="_blank"><i class="fa-solid fa-location-dot text-default me-2"></i>@item.Value.Location</a>
+                               
+                            }</td>
+                        <td class="py-0 td"><span>@item.Value.StartDateTime.ToString("g")</span></td>
+                        <td class="py-0"><span>
+                                @item.Value.EndDateTime.ToString("g")
+                        </span></td>
+                        <td class="py-0 td"><span>@item.Value.Meeting_Type</span></td>
+                        <td class="py-0 td"><span class="badge bg-info">@item.Value.Status</span></td>
+                        <td class="py-0 td-action">
+                            <button class="btn btn-sm btn-info m-1" @onclick=@(args=>RedirectTo($"/mymeetings/{item.Value.Id}")) style="font-size:10px;"><i class="fa-solid fa-pencil"></i></button>
+                            <button class="btn btn-sm btn-info m-1" style="font-size:10px;"><i class="fa-solid fa-plus"></i></button>
+                            <button class="btn btn-sm btn-danger m-1" style="font-size:10px;"><i class="fa-solid fa-x"></i></button>
+                            </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>
+@code {
+
+    [Inject]
+    HttpClient httpClient { get; set; }
+
+    List<Meetings> meetings = new();
+    [Inject]
+    private NavigationManager navigationManager { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        var user = await asp.GetAuthenticationStateAsync();
+        if (!user.User.Identity.IsAuthenticated)
+        {
+            navigationManager.NavigateTo("/Accountlogin");
+
+        }
+        var Id = user.User.Claims.FirstOrDefault(s => s.Type == ClaimTypes.UserData);
+
+        var response = await httpClient.GetFromJsonAsync<StatusResponse<Meetings>>($"api/Meeting/{Convert.ToInt32(Id.Value)}");
+        if (response.IsSuccess)
+        {
+            meetings = response.Results.ToList();
+        }
+
+    }
+
+    async Task RedirectTo(string url)
+    {
+        navigationManager.NavigateTo(url);
+    }
+}

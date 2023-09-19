@@ -14,5 +14,6 @@ namespace MeetingSchedulingApp.Application.Interfaces
         Task<Meetings> Delete(int id);
         Task<Meetings> Get(int id);
         Task<IEnumerable<Meetings>> GetAll();
+        Task<IEnumerable<Meetings>> GetAll(int id);
     }
 }

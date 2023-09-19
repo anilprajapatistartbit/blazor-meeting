@@ -1,6 +1,7 @@
-﻿@page "/schedulemeeting"
+﻿@page "/mymeetings/{Id}"
 @inject AuthenticationStateProvider asp;
 @attribute [Authorize]
+@inject IJSRuntime js;
 <PageTitle> Create Meeting</PageTitle>
 
 
@@ -8,7 +9,8 @@
     <div class="card-header">
         <BreadCrumb>
             <BreadCrumbItem Icon="" Path="/" Text="Home" Index=1 Active=@false />
-            <BreadCrumbItem Icon="" Path="/schedulemeeting" Text="Create meeting" Index=2 Active=@true />
+            <BreadCrumbItem Icon="" Path="/mymeetings" Text="My Meetings" Index=2 Active=@false />
+            <BreadCrumbItem Icon="" Path=@($"/mymeetings/{Id}") Text="Detail" Index=3 Active=@true />
         </BreadCrumb>
     </div>
 
@@ -49,8 +51,8 @@
 
                 </div>
 
-                <input type="submit" value="Create" style="border-radius:8px !important" class="btn btn-success btn-sm mt-1 ms-2" />
-                <input type="reset" value="Reset" style="border-radius:8px !important" class="btn btn-danger btn-sm mt-1" />
+                <input type="submit" value="Update" style="border-radius:8px !important" class="btn btn-success btn-sm mt-1 ms-2" />
+                <input type="button" value="Reset" @onclick="Reset" style="border-radius:8px !important" class="btn btn-danger btn-sm mt-1" />
             </div>
         </form>
     </div>
@@ -58,6 +60,8 @@
 </div>
 
 @code {
+    [Parameter]
+    public string Id { get; set; }
     public Meetings meeting = new();
     [Inject]
     HttpClient httpClient { get; set; }
@@ -72,18 +76,23 @@
             navigationManager.NavigateTo("/Accountlogin");
 
         }
-        var Id = user.User.Claims.FirstOrDefault(s => s.Type == ClaimTypes.UserData);
-        var Email = user.User.Claims.FirstOrDefault(s => s.Type == ClaimTypes.Email);
-        meeting.Host_Id = Convert.ToInt32(Id.Value);
+        var response = await httpClient.GetFromJsonAsync<StatusResponse<Meetings>>($"api/Meeting/detail/{Convert.ToInt32(Id)}");
+        if (response.IsSuccess)
+        {
+            meeting = response.Result;
+        }
     }
-
+    async Task Reset()
+    {
+        await OnInitializedAsync();
+    }
     async Task onSumbit()
     {
-        var response = await httpClient.PostAsJsonAsync<Meetings>("api/Meeting", meeting);
+        var response = await httpClient.PutAsJsonAsync<Meetings>($"api/Meeting/{Convert.ToInt32(Id)}", meeting);
         if (response.IsSuccessStatusCode)
         {
-            meeting = new();
-            await OnInitializedAsync();
+            meeting = new(); 
+            await js.InvokeVoidAsync("clientJsfunctions.RedirectTo", "/mymeetings");
         }
     }
 }

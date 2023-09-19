@@ -17,7 +17,10 @@
     <None Remove="Component\BreadCrumb.razor.css" />
     <None Remove="Component\BreadCrumbItem.razor.css" />
     <None Remove="Pages\Account\AccounLogin.razor.css" />
+    <None Remove="Pages\Account\ForgotPassword.razor.css" />
     <None Remove="Pages\Account\Register.razor.css" />
+    <None Remove="Pages\Account\Register.razor~RF1454e4c2.TMP" />
+    <None Remove="Pages\Meetings\Create.razor.css" />
     <None Remove="Shared\Error403.razor.css" />
     <None Remove="Shared\Error404.razor.css" />
     <None Remove="Shared\ErrorLayout.razor.css" />
@@ -26,8 +29,10 @@
   <ItemGroup>
     <Content Include="Component\BreadCrumb.razor.css" />
     <Content Include="Component\BreadCrumbItem.razor.css" />
+    <Content Include="Pages\Account\ForgotPassword.razor.css" />
     <Content Include="Pages\Account\Register.razor.css" />
     <Content Include="Pages\Account\AccounLogin.razor.css" />
+    <Content Include="Pages\Meetings\Create.razor.css" />
     <Content Include="Shared\Error403.razor.css" />
     <Content Include="Shared\Error404.razor.css" />
     <Content Include="Shared\ErrorLayout.razor.css" />

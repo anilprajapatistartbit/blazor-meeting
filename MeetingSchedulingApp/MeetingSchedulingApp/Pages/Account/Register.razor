@@ -21,7 +21,7 @@
                             <input type="text" class="form-control my-3" style="border-radius:8px !important" placeholder="Last Name" @bind-value="@users.LastName" required>
                         </div>
                         <div class="col-12 col-md-4">
-                            <input type="date" class="form-control my-3" style="border-radius:8px !important" placeholder="Dob" @bind-value="@users.Dob" required>
+                            <input type="date" class="form-control my-3" style="border-radius:8px !important" placeholder="Dob" @bind-value="@users.Dob" min="1900-01-01" max="@DateTime.Today.AddYears(-18)" required>
                         </div>
                         <div class="col-12 col-md-4">
                             <input type="email" class="form-control my-3" style="border-radius:8px !important" placeholder="Email" @bind-value="@users.Email" required>
@@ -55,8 +55,15 @@
                     </div>
                 </div>
                 </div>
-                <input type="submit" value="REGISTER" style="border-radius:8px !important" class="form-control login-btn mt-3" />
-
+               
+                <div class="row m-0">
+                    <div class="col-12 col-md-6">
+                        <input type="submit" value="REGISTER" style="border-radius:8px !important" class="form-control login-btn mt-2" />
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <input type="reset" value="RESET" style="border-radius:8px !important" class="form-control btn btn-danger mt-2" />
+                    </div>
+                </div>
             </div>
         </form>
     </div>

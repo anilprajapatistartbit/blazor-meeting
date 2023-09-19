@@ -13,5 +13,7 @@ namespace MeetingSchedulingApp.Application.Interfaces
         Task<Login> GetByEmail(string  id);
         Task<Login> GetById_Email(string eid, int id);
         Task<Login> Update(Login login);
+        Task<Login> SentForgotPasswrdOtp(string email);
+        Task<Login> ChangePassword(Login login, string Otp);
     }
 }

@@ -29,7 +29,7 @@ namespace MeetingSchedulingApp.Model.DatabaseModel
 
         public DateTime? UpdatedAt { get; set; }
 
-        public string Status { get; set; }
+        public string? Status { get; set; }
 
         [Required]
         public string Meeting_Type { get; set; }

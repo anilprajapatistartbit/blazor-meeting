@@ -1,0 +1,30 @@
+﻿.table-head {
+    background-color: rgb(14, 42, 63);
+    color:#fff;
+}
+
+
+
+.td {
+    min-width: 30px !important;
+    max-width: 120px !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow:ellipsis;
+}
+.td-action {
+    min-width: 30px !important;
+    max-width: 120px !important;
+    white-space:nowrap !important;
+}
+.text-default {
+    color: rgb(14, 42, 63) !important;
+}
+/*@media (min-width: 641px) {
+    td {
+        min-width: 30px !important;
+        max-width: 120px !important;
+        white-space:nowrap;
+        overflow:hidden;
+    }
+}*/

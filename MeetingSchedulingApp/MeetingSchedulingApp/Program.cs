@@ -34,6 +34,7 @@ AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<IUserService,UserService>();
+builder.Services.AddScoped<IMeetingService, MeetingService>();
 builder.Services.AddSingleton(new HttpClient { BaseAddress = new Uri(builder.Configuration.GetValue<string>("httpsurl")) });
 
 builder.Services.Configure<EmailSetting>(builder.Configuration.GetSection("EmailSettings"));

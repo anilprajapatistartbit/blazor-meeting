@@ -99,6 +99,54 @@ namespace MeetingSchedulingApp.Controller
         }
         #endregion
 
+        #region ForgotPassword
+        [HttpGet("forgotpassword/{email}")]
+        public async Task<IActionResult> ForgotPassword(string email)
+        {
+            try
+            {
+                var result = await _loginService.SentForgotPasswrdOtp(email);
+                if (result == null)
+                {
+                    throw new  Exception("User not found");
+                }
+                return StatusCode(StatusCodes.Status200OK, new StatusResponse<Login>() { IsSuccess = true, Message = "Otp successfully send on your email id",Result=result });
+
+            }
+            catch (Exception ex )
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new StatusResponse<Login>() { IsSuccess = false, Message = ex.Message });
+            }
+        }
+
+        [HttpPost("forgotpassword")]
+        public async Task<IActionResult> ForgotPassword(FP fp)
+        {
+            try
+            {
+                var login = await _loginService.GetByEmail(fp.Email);
+                if (login == null)
+                {
+                    throw new Exception("User not found");
+                }
+                byte[] Newsalt;
+                var hash = PasswordHelper.HashPasword(fp.NewPassword, out Newsalt);
+                var hexstring = Convert.ToHexString(Newsalt);
+                login.HashPassword = hash;
+                login.SaltPassword = hexstring;
+                login.UpdatedAt = DateTime.Now;
+                var result = await _loginService.ChangePassword(login, fp.Otp);
+                return StatusCode(StatusCodes.Status200OK, new StatusResponse<Login>() { IsSuccess = true, Message = "Passeord Changed successfully", Result = result });
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new StatusResponse<Login>() { IsSuccess = false, Message = ex.Message });
+            }
+        }
+        #endregion
         #endregion
 
     }

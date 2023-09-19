@@ -9,8 +9,8 @@
             <form class="mt-4" @onsubmit=OnLogin>
             <input type="email" class="form-control mt-3" placeholder="Email" @bind-value="@loginmodel.Email" required>
             <input type="password" class="form-control mt-3" placeholder="Password" @bind-value="@loginmodel.Password" required>
-            <p style="font-size:12px;" class="ms-3 mt-1">
-                <a href="" class="register-color text-decoration-none">Forgot Password ?</a>
+            <p style="font-size:12px;" class="ms-0 mt-1">
+                <button @onclick="Forgot" style="font-size:12px;" class="register-color text-decoration-none btn btn-link">Forgot Password ?</button>
             </p>
             <input type="submit" value="LOG IN" class="form-control login-btn mt-3" />
             
@@ -44,4 +44,11 @@
         }
     }
 
+    async Task Forgot()
+    {
+        if (loginmodel.Email != null && loginmodel.Email != "")
+        {
+            await js.InvokeVoidAsync("clientJsfunctions.RedirectTo", $"/forgotpassword?Email={loginmodel.Email}");
+        }
+    }
 }
