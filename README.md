@@ -21,14 +21,19 @@ This is a Blazor Server-based Meeting Scheduling App, aimed at streamlining the 
 ![screencapture-192-168-1-133-5000-forgotpassword-2023-09-19-17_54_57](https://github.com/anilprajapatistartbit/blazor-meeting/assets/121869921/ab29a064-e741-4994-aa05-342968ae5c06)
 
 ### Change Password
-![screencapture-192-168-1-133-5000-changepassword-2023-09-19-17_56_44](https://github.com/anilprajapatistartbit/blazor-meeting/assets/121869921/4c02db3d-3a17-49e3-92b9-1fdf50b231f4)
+![screencapture-192-168-1-133-5000-changepassword-2023-09-20-18_06_46](https://github.com/anilprajapatistartbit/blazor-meeting/assets/121869921/79e96b03-22be-4f23-9032-5f1f3e1436d4)
 
 ### Create Meeting
-![screencapture-192-168-1-133-5000-schedulemeeting-2023-09-19-17_55_48](https://github.com/anilprajapatistartbit/blazor-meeting/assets/121869921/179b78ac-704a-419f-9ec0-6cf8ec7366ea)
+![screencapture-192-168-1-133-5000-schedulemeeting-2023-09-20-18_07_19](https://github.com/anilprajapatistartbit/blazor-meeting/assets/121869921/2ac16e6b-d43a-4f67-b7ca-7bc470828046)
 
 ### My Meeting
-![screencapture-192-168-1-133-5000-mymeetings-2023-09-19-17_56_20](https://github.com/anilprajapatistartbit/blazor-meeting/assets/121869921/6135ba1e-b5c3-4477-8b69-6a7090a5269a)
+![screencapture-192-168-1-133-5000-mymeetings-2023-09-20-18_08_04 (1)](https://github.com/anilprajapatistartbit/blazor-meeting/assets/121869921/1147ade0-ddb9-4e14-b907-d56cc87c9221)
 
 ### Edit Meeting
+![screencapture-192-168-1-133-5000-mymeetings-3-2023-09-20-18_11_00](https://github.com/anilprajapatistartbit/blazor-meeting/assets/121869921/bf788513-76a9-42fb-beaa-476e7300949e)
 
-![screencapture-192-168-1-133-5000-mymeetings-2-2023-09-19-17_55_39](https://github.com/anilprajapatistartbit/blazor-meeting/assets/121869921/762d5d3b-4f58-4378-ab36-3507fd429e6b)
+## My Invitation
+![screencapture-192-168-1-133-5000-myinvitation-2023-09-20-18_07_03](https://github.com/anilprajapatistartbit/blazor-meeting/assets/121869921/3b61001b-a6c4-4bbb-badd-4b5fcaf5ede3)
+
+## Send Invitation
+![screencapture-192-168-1-133-5000-invite-2023-09-20-18_07_26](https://github.com/anilprajapatistartbit/blazor-meeting/assets/121869921/e69c2698-3253-4a2b-988f-83d47a363ad2)
