@@ -1,5 +1,6 @@
 ﻿@page "/"
-@attribute [Authorize]
+@attribute [AllowAnonymous]
+@inject AuthenticationStateProvider asp;
 <PageTitle>Dashboard</PageTitle>
 
 <div class="card ">
@@ -15,4 +16,20 @@
     <div class="card-body mt-2">
         <h4 class="text-center">Dashboard coming soon...</h4>
     </div>
-</div>
+</div
+@code{
+
+    [Inject]
+    private NavigationManager navigationManager { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        var user = await asp.GetAuthenticationStateAsync();
+        if (!user.User.Identity.IsAuthenticated)
+        {
+            navigationManager.NavigateTo("/Accountlogin");
+
+        }
+        
+
+    }
+}

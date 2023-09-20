@@ -1,0 +1,97 @@
+﻿@page "/invite"
+@inject AuthenticationStateProvider asp;
+@inject IJSRuntime js;
+@attribute [Authorize]
+<PageTitle> Send Invite</PageTitle>
+
+<div class="card ">
+    <div class="card-header">
+
+
+        <BreadCrumb>
+            <BreadCrumbItem Icon="" Path="/" Text="Home" Index=1 Active=@false />
+            <BreadCrumbItem Icon="" Path="/invite" Text="Send invite" Index=2 Active=@true />
+        </BreadCrumb>
+    </div>
+    <div class="card-body mt-2">
+        <form class="mt-4" @onsubmit="onSumbit">
+            <div class="form-group wid-auto">
+                <lagend class="lagend-register">Add Participants</lagend>
+                <div class="m-2 register-row p-2">
+                    <div class="col-12 m-1 pe-2">
+                        <div class="mt-2">
+                            <label class="lagend-register">Select Meeting</label>
+                            <select class="form-select form-control mb-2" style="border-radius:8px !important" @bind="participant.Meeting_Id" required>
+                                <option value="">select</option>
+                                @foreach (var item in meetings)
+                                {
+                                    <option value="@item.Id">@item.Title - @item.Host.FirstName @item.Host.LastName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-12 m-1 pe-2">
+                        <div class="mt-2">
+                            <label class="lagend-register">Select User</label>
+                            <select class="form-select form-control mb-2" style="border-radius:8px !important" @bind="participant.User_Id" required>
+                                <option value="">select</option>
+                                @foreach (var item in users)
+                                {
+                                    <option value="@item.Id">@item.FirstName @item.LastName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <input type="submit" value="Submit" style="border-radius:8px !important" class="btn btn-success btn-sm mt-3" />
+                <input type="reset" value="Reset" style="border-radius:8px !important" class="btn btn-danger btn-sm mt-3" />
+            </div>
+        </form>
+    </div>
+</div>
+@code {
+    [Inject]
+    HttpClient httpClient { get; set; }
+    List<Meetings> meetings = new();
+    List<Users> users = new();
+
+    Participants participant = new();
+    [Inject]
+    private NavigationManager navigationManager { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+
+        var user = await asp.GetAuthenticationStateAsync();
+        if (!user.User.Identity.IsAuthenticated)
+        {
+            navigationManager.NavigateTo("/Accountlogin");
+
+        }
+        var Id = user.User.Claims.FirstOrDefault(s => s.Type == ClaimTypes.UserData);
+
+        var response = await httpClient.GetFromJsonAsync<StatusResponse<Meetings>>($"api/Meeting/{Convert.ToInt32(Id.Value)}");
+        var response2 = await httpClient.GetFromJsonAsync<StatusResponse<Users>>($"api/User");
+        if (response.IsSuccess)
+        {
+            meetings = response.Results.ToList();
+        }
+        if (response2.IsSuccess)
+        {
+            users = response2.Results.ToList();
+        }
+
+    }
+    async Task onSumbit()
+    {
+        if (participant.User_Id != null && participant.Meeting_Id != null)
+        {
+            var response = await httpClient.PostAsJsonAsync<Participants>($"api/Participant", participant);
+            if (response.IsSuccessStatusCode)
+            {
+                participant = new();
+                await js.InvokeVoidAsync("clientJsfunctions.RedirectTo", "/mymeetings");
+            }
+        }
+
+    }
+}

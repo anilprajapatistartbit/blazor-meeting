@@ -1,0 +1,59 @@
+﻿<div class="modal show" id="myModal" style="display: block; padding-left: 0px;">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Meeting Delete confirmation</h4>
+                <button type="button" class="btn-close" @onclick=@(args=>CloseModal(false))></button>
+            </div>
+
+            <!-- Modal body -->
+
+            <div class="modal-body">
+                <div class="alert alert-danger">
+                    <strong>Danger!</strong> Are you sure. want to remove?
+                </div>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" @onclick="onSumbit" class="btn btn-success">Submit</button>
+                <button type="button" class="btn btn-danger" @onclick=@(args=>CloseModal(false))>Close</button>
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+<div class="modal-backdrop show"></div>
+@code {
+        [Parameter]
+        public EventCallback<bool> IsDelete { get; set; }
+
+        [Parameter]
+        public int MeetingId { get; set; }
+
+
+        [Inject]
+        HttpClient httpClient { get; set; }
+
+
+        [Parameter]
+        public RenderFragment ChildContent { get; set; }
+
+
+        private async Task CloseModal(bool status)
+        {
+        await IsDelete.InvokeAsync(status);
+
+        }
+        async Task onSumbit()
+        {
+            var response = await httpClient.DeleteAsync($"api/Meeting/{MeetingId}");
+            if (response.IsSuccessStatusCode)
+            {
+                await IsDelete.InvokeAsync(false);
+            }
+    }
+    }

@@ -103,8 +103,28 @@ namespace MeetingSchedulingApp.Controller
                 meeting.StartDateTime = meetings.StartDateTime;
                 meeting.EndDateTime = meeting.EndDateTime;
                 meeting.UpdatedAt = DateTime.Now;
+                meeting.Status= meetings.Status;
                 var result = await _meetingService.Update(meeting);
                 return StatusCode(StatusCodes.Status200OK, new StatusResponse<Meetings>() { IsSuccess = true, Message = "Meeting updated successfully", Result = result });
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(StatusCodes.Status500InternalServerError, new StatusResponse<Meetings>() { IsSuccess = false, Message = ex.Message });
+            }
+        }
+        #endregion
+
+        #region Update
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Put(int id)
+        {
+            try
+            {
+
+                var result = await _meetingService.Delete(id);
+                return StatusCode(StatusCodes.Status200OK, new StatusResponse<Meetings>() { IsSuccess = true, Message = "Meeting removed successfully", Result = result });
 
             }
             catch (Exception ex)

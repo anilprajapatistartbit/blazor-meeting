@@ -1,0 +1,19 @@
+﻿@page "/myprofile"
+@inject AuthenticationStateProvider asp;
+@attribute [Authorize]
+<PageTitle> Invitations</PageTitle>
+
+<div class="card ">
+    <div class="card-header">
+        <BreadCrumb>
+            <BreadCrumbItem Icon="" Path="/" Text="Home" Index=1 Active=@false />
+            <BreadCrumbItem Icon="" Path="/myprofile" Text="My Profile" Index=2 Active=@true />
+        </BreadCrumb>
+    </div>
+    <div class="card-body mt-2">
+        <h4 class="text-center">My profile Page coming soon...</h4>
+    </div>
+</div>
+@code {
+
+}

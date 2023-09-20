@@ -1,0 +1,117 @@
+﻿@page "/myinvitation"
+@inject AuthenticationStateProvider asp;
+@attribute [Authorize]
+<PageTitle> Invitations</PageTitle>
+
+<div class="card ">
+    <div class="card-header">
+        <BreadCrumb>
+            <BreadCrumbItem Icon="" Path="/" Text="Home" Index=1 Active=@false />
+            <BreadCrumbItem Icon="" Path="/myinvitation" Text="My invitation" Index=2 Active=@true />
+        </BreadCrumb>
+    </div>
+    <div class="card-body mt-2 table-responsive">
+        <table class="table table-striped table-bordered table-sm">
+            <thead class="table-head">
+                <tr>
+                    <th class="th">#</th>
+                    <th class="th">Title</th>
+                    <th class="th">Location/Url</th>
+                    <th class="th">Start Date</th>
+                    <th class="th">End Date</th>
+                    <th class="th">Meeting Host</th>
+                    <th class="th">Meeting Type</th>
+                    <th class="th">Meeting Status</th>
+                    <th class="th">Status</th>
+                    <th class="th">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+               @foreach (var item in participants.Select((Value, i) => (Value, i)))
+                {
+                    <tr class="align-middle">
+                        <th class="py-0">@(item.i + 1)</th>
+                        <td class="py-0 td"><span>@item.Value.Meeting.Title</span></td>
+                        <td class="py-0 td">
+                            @if (item.Value.Meeting.Meeting_Type.ToLower() == "virtual")
+                            {
+                                <a href="@item.Value.Meeting.Location" target="_blank"><i class="fa-solid fa-globe me-1 text-default"></i>@item.Value.Meeting.Location</a>
+                            }
+                            else
+                            {
+                                <a href="https://www.google.com/maps/search/@item.Value.Meeting.Location" target="_blank"><i class="fa-solid fa-location-dot text-default me-2"></i>@item.Value.Meeting.Location</a>
+
+                            }
+                        </td>
+                        <td class="py-0 td"><span>@item.Value.Meeting.StartDateTime.ToString("g")</span></td>
+                        <td class="py-0 td">
+                            <span>
+                                @item.Value.Meeting.EndDateTime.ToString("g")
+                            </span>
+                        </td>
+                        <td class="py-0 td"><span>@($"{item.Value.Meeting.Host.FirstName} {item.Value.Meeting.Host.LastName}")</span></td>
+                        <td class="py-0 td"><span>@item.Value.Meeting.Meeting_Type</span></td>
+                        <td class="py-0 td"><span class="badge bg-@(item.Value.Meeting.Status=="pending" ? "warning" :item.Value.Meeting.Status=="started" ? "primary":item.Value.Meeting.Status=="completed" ? "success":"danger")">@item.Value.Meeting.Status?.ToUpper()</span></td>
+                        <td class="py-0 td"><span class="badge bg-@(item.Value.Status =="pending" ? "warning":item.Value.Status =="accept"?"success":"danger")">@item.Value.Status?.ToUpper()</span></td>
+                        <td class="py-0 td-action">
+                            <button class="btn btn-sm btn-success m-1" @onclick=@(args=>ModalOpen(true,item.Value.Id,true)) style="font-size:10px;"><i class="fa-solid fa-check"></i></button>
+                            <button class="btn btn-sm btn-danger m-1" @onclick=@(args=>ModalOpen(true,item.Value.Id,false)) style="font-size:10px;"><i class="fa-solid fa-x"></i></button>
+
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>
+@if (isOpen)
+{
+    <PopupConfirmation IsOpen="ModalOpen" ParticipantId=@participantId Status=@status />
+}
+@code {
+    [Inject]
+    HttpClient httpClient { get; set; }
+    public bool isOpen = false;
+    public bool status = false;
+    public int participantId = 0;
+    List<Participants> participants = new();
+    [Inject]
+    private NavigationManager navigationManager { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+
+        var user = await asp.GetAuthenticationStateAsync();
+        if (!user.User.Identity.IsAuthenticated)
+        {
+            navigationManager.NavigateTo("/Accountlogin");
+
+        }
+        var Id = user.User.Claims.FirstOrDefault(s => s.Type == ClaimTypes.UserData);
+
+        var response = await httpClient.GetFromJsonAsync<StatusResponse<Participants>>($"api/Participant/{Convert.ToInt32(Id.Value)}");
+        if (response.IsSuccess)
+        {
+            participants = response.Results.ToList();
+        }
+
+    }
+    async Task ModalOpen(bool _status, int _id,bool _type)
+    {
+        participantId = _id;
+        status = _type;
+        ModalOpen(_status);
+
+
+    }
+
+    async Task ModalOpen(bool status)
+    {
+        isOpen = status;
+        if (!status)
+        {
+            await OnInitializedAsync();
+        }
+    }
+
+}

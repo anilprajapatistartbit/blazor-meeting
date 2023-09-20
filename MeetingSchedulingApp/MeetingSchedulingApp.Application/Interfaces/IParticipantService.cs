@@ -13,8 +13,7 @@ namespace MeetingSchedulingApp.Application.Interfaces
         Task<Participants> Update(Participants participants);
         Task<Participants> Delete(int id);
         Task<Participants> Get(int id);
-
-        Task<IEnumerable<Participants>> GetAll();
+        Task<IEnumerable<Participants>> GetAll(int id);
         Task<IEnumerable<Participants>> GetAllByMeetingId(int id);
 
     }

@@ -1,4 +1,5 @@
-﻿using MeetingSchedulingApp.Application.Interfaces;
+﻿using MeetingSchedulingApp.Application.Implimentation;
+using MeetingSchedulingApp.Application.Interfaces;
 using MeetingSchedulingApp.Application.SmtpService;
 using MeetingSchedulingApp.Helper;
 using MeetingSchedulingApp.Model.DatabaseModel;
@@ -28,8 +29,26 @@ namespace MeetingSchedulingApp.Controller
         #endregion
 
         #region Method
+        #region Get
+        [HttpGet]
+        public async Task<IActionResult> GetAll(int id)
+        {
+            try
+            {
 
+                var result = await _userService.GetAll();
+                return StatusCode(StatusCodes.Status200OK, new StatusResponse<Users>() { IsSuccess = true, Message = "Api Execute Successfully", Results = result });
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(StatusCodes.Status500InternalServerError, new StatusResponse<Users>() { IsSuccess = false, Message = ex.Message });
+            }
+        }
+        #endregion
         #region Post
+
         [HttpPost]
         public async Task<IActionResult> Post(Users users)
         {

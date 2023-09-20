@@ -1,0 +1,61 @@
+﻿<div class="modal show" id="myModal" style="display: block; padding-left: 0px;">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Invitation confirmation</h4>
+                <button type="button" class="btn-close" @onclick=@(args=>CloseModal(false))></button>
+            </div>
+
+            <!-- Modal body -->
+
+            <div class="modal-body">
+                <div class="alert alert-@(Status ? "success":"danger")">
+                    <strong>@(Status ? "Success" : "Danger")!</strong> Are you sure. want to @(Status ? "accecpt" : "reject") the invite?
+                </div>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" @onclick="onSumbit" class="btn btn-success">Submit</button>
+                <button type="button" class="btn btn-danger" @onclick=@(args=>CloseModal(false))>Close</button>
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+<div class="modal-backdrop show"></div>
+@code {
+    [Parameter]
+    public EventCallback<bool> IsOpen { get; set; }
+    [Parameter]
+    public bool Status { get; set; }
+
+    [Parameter]
+    public int ParticipantId { get; set; }
+
+
+    [Inject]
+    HttpClient httpClient { get; set; }
+
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+
+    private async Task CloseModal(bool status)
+    {
+        await IsOpen.InvokeAsync(status);
+
+    }
+    async Task onSumbit()
+    {
+        var response = await httpClient.PutAsJsonAsync<bool>($"api/Participant/Invite/{ParticipantId}", Status);
+        if (response.IsSuccessStatusCode)
+        {
+            await IsOpen.InvokeAsync(false);
+        }
+    }
+}

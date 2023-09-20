@@ -1,0 +1,90 @@
+﻿<div class="modal show" id="myModal" style="display: block; padding-left: 0px;">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Update meeting status</h4>
+                <button type="button" class="btn-close" @onclick=@(args=>CloseModal(false))></button>
+            </div>
+
+            <!-- Modal body -->
+            
+                <form class="mt-3" @onsubmit="onSumbit">
+                <div class="modal-body">
+                    <div class="form-group w-100">
+                        <div class="mt-2">
+                            <label class="lagend-register">Status</label>
+                            <select class="form-select form-control mb-2" style="border-radius:8px !important" @bind="meeting.Status" required>
+                                @foreach (string item in Statuslist)
+                                {
+                                    @*if (item.tolower() == meeting.status.tolower())
+                                    {
+                                        <option value="@item.tolower()">@item</option>
+                                    }
+                                    else
+                                    {*@
+                                        <option value="@item.ToLower()">@item</option>
+                                   @* }*@
+                                }
+                            </select>
+                        </div>
+                    </div>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-success">Submit</button>
+                <button type="button" class="btn btn-danger" @onclick=@(args=>CloseModal(false))>Close</button>
+            </div>
+                </form>
+          
+
+        </div>
+    </div>
+</div>
+<div class="modal-backdrop show"></div>
+@code {
+    [Parameter]
+    public EventCallback<bool> Isclose { get; set; }
+
+    [Parameter]
+    public int MeetingId { get; set; }
+
+    public Meetings meeting = new();
+
+    [Inject]
+    HttpClient httpClient { get; set; }
+
+    List<string> Statuslist = new();
+
+    public string status = "";
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Statuslist = GetEnum.StatusData();
+        var response = await httpClient.GetFromJsonAsync<StatusResponse<Meetings>>($"api/Meeting/detail/{MeetingId}");
+        if (response.IsSuccess)
+        {
+            meeting = response.Result;
+
+        }
+    }
+
+
+    private async Task CloseModal(bool status)
+    {
+        await Isclose.InvokeAsync(status);
+
+    }
+    async Task onSumbit()
+    {
+        var response = await httpClient.PutAsJsonAsync<Meetings>($"api/Meeting/{MeetingId}", meeting);
+        if (response.IsSuccessStatusCode)
+        {
+            meeting = new(); await Isclose.InvokeAsync(false);
+        }
+    }
+}

@@ -10,6 +10,22 @@ namespace MeetingSchedulingApp.Model.Enums
     {
         PENDING = 1,
         COMPLETED = 2,
+        STARTED = 3,
+        CANCELLED = 4,
 
     }
+
+   public static class GetEnum
+    {
+        public static List<string>  StatusData()
+        {
+            List<string> Key = Enum.GetNames(typeof(Status))
+                                .Cast<string>()
+                                .ToList();
+        return Key;
+        }
+      
+    }
+    
+
 }
