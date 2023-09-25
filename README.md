@@ -23,6 +23,9 @@ This is a Blazor Server-based Meeting Scheduling App, aimed at streamlining the 
 ### Change Password
 ![screencapture-192-168-1-133-5000-changepassword-2023-09-20-18_06_46](https://github.com/anilprajapatistartbit/blazor-meeting/assets/121869921/79e96b03-22be-4f23-9032-5f1f3e1436d4)
 
+### Dashboard
+![screencapture-192-168-1-133-5000-2023-09-25-17_36_09](https://github.com/anilprajapatistartbit/blazor-meeting/assets/121869921/57297a13-b562-41ab-a82e-ab8f7fdaa2df)
+
 ### Create Meeting
 ![screencapture-192-168-1-133-5000-schedulemeeting-2023-09-20-18_07_19](https://github.com/anilprajapatistartbit/blazor-meeting/assets/121869921/2ac16e6b-d43a-4f67-b7ca-7bc470828046)
 
