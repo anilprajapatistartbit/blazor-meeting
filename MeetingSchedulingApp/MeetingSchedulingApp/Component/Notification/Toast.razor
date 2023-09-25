@@ -1,0 +1,100 @@
+﻿@inject ToastService ts;
+@implements IDisposable;
+
+
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+    <div class="toast bg-white fade @(_isVisible ? "show" : null)">
+    <div class="toast-header">
+            <i class="@_iconCssClass text-@_backgroundCssClass me-2"></i>
+        <strong class="me-auto">@_heading</strong>
+        <small class="text-muted">@DateTime.Now.ToString("G")</small><button type="button" class="btn-close" @onclick="HideToast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">@_message</div>
+   <div class="progress" style="height:3px">
+            <div class="progress-bar bg-@_backgroundCssClass @(_isVisible ? "showprogress" : null)" style="width:100%" role="progressbar"></div>
+    </div>
+</div>
+</div>
+
+
+@code {
+    private string? _heading;
+    private string? _message;
+    private bool _isVisible;
+    private string? _backgroundCssClass;
+    private string? _iconCssClass;
+
+    protected override void OnInitialized()
+    { 
+        ts.Onchange += Onchange;
+    }
+
+    private void Onchange(Notify notify)
+    {
+        try
+        {
+
+            BuildToastSettings(notify.level, notify.message);
+            _isVisible = notify.isShow;
+            InvokeAsync(() => StateHasChanged());
+
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+    }
+
+    private void HideToast()
+    {
+        try
+        {
+            Console.WriteLine(DateTime.Now);
+            _isVisible = false;
+            InvokeAsync(() => StateHasChanged());
+        }
+        catch(Exception ex)
+        {
+
+            Console.WriteLine(ex.Message);
+        }
+
+    }
+
+    private void BuildToastSettings(ToastLevel level, string message)
+    {
+        switch (level)
+        {
+            case ToastLevel.Info:
+                _backgroundCssClass = $"info";
+                _iconCssClass = "fa-solid fa-circle-info";
+                _heading = "Info";
+                break;
+            case ToastLevel.Success:
+                _backgroundCssClass = $"success";
+                _iconCssClass = "fa-solid fa-circle-check";
+                _heading = "Success";
+                break;
+            case ToastLevel.Warning:
+                _backgroundCssClass = $"warning";
+                _iconCssClass = "fa-solid fa-circle-exclamation";
+                _heading = "Warning";
+                break;
+            case ToastLevel.Error:
+                _backgroundCssClass = "danger";
+                _iconCssClass = "fa-solid fa-fire";
+                _heading = "Error";
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(level), level, null);
+        }
+
+        _message = message;
+    }
+
+    void IDisposable.Dispose()
+    {
+        ts.Onchange -= Onchange;
+    }
+}

@@ -27,39 +27,51 @@
                 </tr>
             </thead>
             <tbody>
-               @foreach (var item in participants.Select((Value, i) => (Value, i)))
+                @if (participants.Count() > 0)
                 {
-                    <tr class="align-middle">
-                        <th class="py-0">@(item.i + 1)</th>
-                        <td class="py-0 td"><span>@item.Value.Meeting.Title</span></td>
-                        <td class="py-0 td">
-                            @if (item.Value.Meeting.Meeting_Type.ToLower() == "virtual")
-                            {
-                                <a href="@item.Value.Meeting.Location" target="_blank"><i class="fa-solid fa-globe me-1 text-default"></i>@item.Value.Meeting.Location</a>
-                            }
-                            else
-                            {
-                                <a href="https://www.google.com/maps/search/@item.Value.Meeting.Location" target="_blank"><i class="fa-solid fa-location-dot text-default me-2"></i>@item.Value.Meeting.Location</a>
+                    @foreach (var item in participants.Select((Value, i) => (Value, i)))
+                    {
+                        <tr class="align-middle">
+                            <th class="py-0">@(item.i + 1)</th>
+                            <td class="py-0 td"><span>@item.Value.Meeting.Title</span></td>
+                            <td class="py-0 td">
+                                @if (item.Value.Meeting.Meeting_Type.ToLower() == "virtual")
+                                {
+                                    <a href="@item.Value.Meeting.Location" target="_blank"><i class="fa-solid fa-globe me-1 text-default"></i>@item.Value.Meeting.Location</a>
+                                }
+                                else
+                                {
+                                    <a href="https://www.google.com/maps/search/@item.Value.Meeting.Location" target="_blank"><i class="fa-solid fa-location-dot text-default me-2"></i>@item.Value.Meeting.Location</a>
 
-                            }
-                        </td>
-                        <td class="py-0 td"><span>@item.Value.Meeting.StartDateTime.ToString("g")</span></td>
-                        <td class="py-0 td">
-                            <span>
-                                @item.Value.Meeting.EndDateTime.ToString("g")
-                            </span>
-                        </td>
-                        <td class="py-0 td"><span>@($"{item.Value.Meeting.Host.FirstName} {item.Value.Meeting.Host.LastName}")</span></td>
-                        <td class="py-0 td"><span>@item.Value.Meeting.Meeting_Type</span></td>
-                        <td class="py-0 td"><span class="badge bg-@(item.Value.Meeting.Status=="pending" ? "warning" :item.Value.Meeting.Status=="started" ? "primary":item.Value.Meeting.Status=="completed" ? "success":"danger")">@item.Value.Meeting.Status?.ToUpper()</span></td>
-                        <td class="py-0 td"><span class="badge bg-@(item.Value.Status =="pending" ? "warning":item.Value.Status =="accept"?"success":"danger")">@item.Value.Status?.ToUpper()</span></td>
-                        <td class="py-0 td-action">
-                            <button class="btn btn-sm btn-success m-1" @onclick=@(args=>ModalOpen(true,item.Value.Id,true)) style="font-size:10px;"><i class="fa-solid fa-check"></i></button>
-                            <button class="btn btn-sm btn-danger m-1" @onclick=@(args=>ModalOpen(true,item.Value.Id,false)) style="font-size:10px;"><i class="fa-solid fa-x"></i></button>
+                                }
+                            </td>
+                            <td class="py-0 td"><span>@item.Value.Meeting.StartDateTime.ToString("g")</span></td>
+                            <td class="py-0 td">
+                                <span>
+                                    @item.Value.Meeting.EndDateTime.ToString("g")
+                                </span>
+                            </td>
+                            <td class="py-0 td"><span>@($"{item.Value.Meeting.Host.FirstName} {item.Value.Meeting.Host.LastName}")</span></td>
+                            <td class="py-0 td"><span>@item.Value.Meeting.Meeting_Type</span></td>
+                            <td class="py-0 td"><span class="badge bg-@(item.Value.Meeting.Status=="pending" ? "warning" :item.Value.Meeting.Status=="started" ? "primary":item.Value.Meeting.Status=="completed" ? "success":"danger")">@item.Value.Meeting.Status?.ToUpper()</span></td>
+                            <td class="py-0 td"><span class="badge bg-@(item.Value.Status =="pending" ? "warning":item.Value.Status =="accept"?"success":"danger")">@item.Value.Status?.ToUpper()</span></td>
+                            <td class="py-0 td-action">
+                                <button class="btn btn-sm btn-success m-1" @onclick=@(args=>ModalOpen(true,item.Value.Id,true)) style="font-size:10px;"><i class="fa-solid fa-check"></i></button>
+                                <button class="btn btn-sm btn-danger m-1" @onclick=@(args=>ModalOpen(true,item.Value.Id,false)) style="font-size:10px;"><i class="fa-solid fa-x"></i></button>
 
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="10" align="center">
+                            Data not availbale
                         </td>
                     </tr>
                 }
+
             </tbody>
         </table>
 
@@ -96,7 +108,7 @@
         }
 
     }
-    async Task ModalOpen(bool _status, int _id,bool _type)
+    async Task ModalOpen(bool _status, int _id, bool _type)
     {
         participantId = _id;
         status = _type;

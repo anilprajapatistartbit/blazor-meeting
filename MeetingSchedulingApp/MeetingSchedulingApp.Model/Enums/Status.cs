@@ -6,6 +6,13 @@ using System.Threading.Tasks;
 
 namespace MeetingSchedulingApp.Model.Enums
 {
+    public enum ToastLevel
+    {
+        Info,
+        Success,
+        Warning,
+        Error
+    }
     public enum Status
     {
         PENDING = 1,

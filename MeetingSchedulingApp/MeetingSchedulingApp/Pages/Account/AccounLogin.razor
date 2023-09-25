@@ -1,6 +1,7 @@
 ﻿@page "/accountlogin"
 @using System.Web;
 @inject IJSRuntime js;
+@inject ToastService toastService;
 <PageTitle>Login</PageTitle>
 <div class="">
     <div class="m-auto bg-white login-container p-4">
@@ -10,7 +11,7 @@
             <input type="email" class="form-control mt-3" placeholder="Email" @bind-value="@loginmodel.Email" required>
             <input type="password" class="form-control mt-3" placeholder="Password" @bind-value="@loginmodel.Password" required>
             <p style="font-size:12px;" class="ms-0 mt-1">
-                <button @onclick="Forgot" style="font-size:12px;" class="register-color text-decoration-none btn btn-link">Forgot Password ?</button>
+                <button @onclick="Forgot" type="button" style="font-size:12px;" class="register-color text-decoration-none btn btn-link">Forgot Password ?</button>
             </p>
             <input type="submit" value="LOG IN" class="form-control login-btn mt-3" />
             
@@ -23,7 +24,6 @@
     MeetingSchedulingApp.Model.ApiModel.LoginModel loginmodel = new();
     [Inject]
     HttpClient httpClient { get; set; }
-
     [Inject]
     private NavigationManager navigationManager { get; set; }
     protected override async Task OnInitializedAsync()
@@ -35,20 +35,28 @@
         var response = await httpClient.PostAsJsonAsync<MeetingSchedulingApp.Model.ApiModel.LoginModel>("api/Auth/Login", loginmodel);
         if (response.IsSuccessStatusCode)
         {
-            var data = await response.Content.ReadFromJsonAsync<AuthRespose>();
-            if (data.isAuthenticated)
+            var data = await response.Content.ReadFromJsonAsync<StatusResponse<Login>>();
+            if (data.IsSuccess)
             {
-                var url = $"/Login?email={HttpUtility.UrlEncode(data.Login.User.Email)}&name={HttpUtility.UrlEncode(data.Login.User.FirstName + " " + data.Login.User.LastName)}&id={HttpUtility.UrlEncode(data.Login.User_Id.ToString())}";
+                toastService.Toast(data.Message, ToastLevel.Success, true);
+                var url = $"/Login?email={HttpUtility.UrlEncode(data.Result.User.Email)}&name={HttpUtility.UrlEncode(data.Result.User.FirstName + " " + data.Result.User.LastName)}&id={HttpUtility.UrlEncode(data.Result.User_Id.ToString())}";
                 await js.InvokeVoidAsync("clientJsfunctions.RedirectTo", url);
+            }
+            else
+            {
+                toastService.Toast(data.Message, ToastLevel.Error, true);
             }
         }
     }
-
     async Task Forgot()
     {
         if (loginmodel.Email != null && loginmodel.Email != "")
         {
             await js.InvokeVoidAsync("clientJsfunctions.RedirectTo", $"/forgotpassword?Email={loginmodel.Email}");
+        }
+        else
+        {
+            toastService.Toast($"Email field is required",ToastLevel.Error,true);
         }
     }
 }

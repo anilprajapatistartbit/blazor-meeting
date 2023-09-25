@@ -50,16 +50,17 @@ namespace MeetingSchedulingApp.Controller
                 var check = PasswordHelper.VerifyPassword(login.Password, logindata.HashPassword, salt);
                 if (check)
                 {
-                    return StatusCode(200 ,new AuthRespose() { isAuthenticated = true,Login = logindata});
+                    return StatusCode(200 ,new StatusResponse<Login>() { Message= $"Welcome {logindata.User.FirstName} {logindata.User.LastName}", IsSuccess = true,Result = logindata});
                 }
-              
-                return StatusCode(200, new AuthRespose() { isAuthenticated = false });
+
+                return StatusCode(200, new StatusResponse<Login>() { IsSuccess = false, Message="Invalid email or password" });
+
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                return StatusCode(200, new StatusResponse<Login>() { IsSuccess = false, Message = ex.Message });
 
-                return StatusCode(500, ex);
             }
         }
         #endregion

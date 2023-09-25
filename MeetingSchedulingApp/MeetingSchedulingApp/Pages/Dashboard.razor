@@ -1,6 +1,7 @@
 ﻿@page "/"
 @attribute [AllowAnonymous]
-@inject AuthenticationStateProvider asp;
+@inject AuthenticationStateProvider asp
+@inject ToastService ts;
 <PageTitle>Dashboard</PageTitle>
 
 <div class="card ">
@@ -13,23 +14,187 @@
 
 
     </div>
-    <div class="card-body mt-2">
-        <h4 class="text-center">Dashboard coming soon...</h4>
-    </div>
-</div
-@code{
+    <div class="card-body mt-2 px-0">
+        <div class="Meetings">
+            @if (dashboard?.Upcoming?.Count() > 0)
+            {
+                <div class="my-2 px-5">
+                    <div>
 
+                        @foreach (var items in dashboard.Upcoming)
+                        {
+                            <div>@items.scheduledDate.ToString("D")</div>
+                            <div class="row">
+                                @foreach (var item in items.Meetings)
+                                {
+                                    <div class="col-12 col-md-6 dashboard-card">
+                                        <div>
+                                            <div class="row w-100 dash-border">
+                                                <div class="col-2 d-flex justify-content-center align-items-center dashboard-bg-color text-light fw-bolder">
+                                                    <div class="">
+                                                        <strong>@(item.StartDateTime.ToString("HH:mm"))</strong>
+                                                    </div>
+                                                </div>
+                                                <div class="col-10">
+                                                    <div class="dashboard-text-color">
+                                                        <div class="d-flex justify-content-between align-items-center mb-3 pt-2">
+                                                            <div>
+                                                                @item.Title
+                                                            </div>
+                                                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                                                        </div>
+                                                        <div class="d-none d-md-flex d-lg-dlex row mx-0 mb-3 pt-2">
+                                                            <div class="col-3 p-0">
+                                                                <i class="fa-solid fa-stopwatch me-1" style="font-size:1.3rem"></i>@if (item.EndDateTime.Subtract(item.StartDateTime).TotalHours < 1)
+                                                                {
+                                                                    <span>
+                                                                        @((float)System.Math.Round(item.EndDateTime.Subtract(item.StartDateTime).TotalMinutes, 2))Min
+                                                                    </span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span>
+                                                                        @((float)System.Math.Round(item.EndDateTime.Subtract(item.StartDateTime).TotalHours, 2))h
+                                                                    </span>
+                                                                }
+                                                            </div>
+                                                            @if (item.Meeting_Type.ToLower() == "virtual")
+                                                            {
+                                                                <div class="col-9 p-0 dashboard-text-color text-container">
+                                                                    <a href="@item.Location" target="_blank" class="dashboard-text-color text-decoration-none"><span class="ellipsis"><i class="fa-solid fa-globe me-1" style="font-size:1.3rem"></i>@item.Location</span></a>
+                                                                </div>
+                                                            }
+                                                            else
+                                                            {
+                                                                <div class="col-9 p-0 dashboard-text-color text-container">
+                                                                    <a href="https://www.google.com/maps/search/@item.Location" target="_blank" class=" dashboard-text-color text-decoration-none">
+                                                                        <span class="ellipsis">
+                                                                            <i class="fa-solid fa-location-dot me-1" style="font-size:1.3rem"></i>@item.Location
+                                                                        </span>
+                                                                    </a>
+                                                                </div>
+
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                }
+                            </div>
+                        }
+
+
+                    </div>
+                </div>
+            }
+            <div class="dashboard-today-bg my-2 px-5 py-3">
+                @if (dashboard?.Today?.Count() > 0)
+                {
+                    <div>
+                        <div class="fw-bolder text-light">Today</div>
+                        <div class="row">
+                            @foreach (var item in dashboard.Today)
+                            {
+                                <div class="col-12 col-md-6 dashboard-card">
+                                    <div>
+                                        <div class="row w-100 dash-border-today">
+                                            <div class="col-2 d-flex justify-content-center align-items-center dashboard-bg-color text-light fw-bolder">
+                                                <div class="">
+                                                    <strong>@(item.StartDateTime.ToString("HH:mm"))</strong>
+                                                </div>
+                                            </div>
+                                            <div class="col-10 bg-light" style="border-radius: 0px 5px 5px 0px;">
+                                                <div class="dashboard-text-color">
+                                                    <div class="d-flex justify-content-between align-items-center mb-3 pt-2">
+                                                        <div>
+                                                            @item.Title
+                                                        </div>
+                                                        <i class="fa-solid fa-ellipsis-vertical"></i>
+                                                    </div>
+                                                    <div class="d-none d-md-flex d-lg-dlex row mx-0 mb-3 pt-2">
+                                                        <div class="col-3 p-0">
+                                                            <i class="fa-solid fa-stopwatch me-1" style="font-size:1.3rem"></i>
+                                                            @if (item.EndDateTime.Subtract(item.StartDateTime).TotalHours < 1)
+                                                            {
+                                                                <span>
+                                                                    @((float)System.Math.Round(item.EndDateTime.Subtract(item.StartDateTime).TotalMinutes, 2))Min
+                                                                </span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span>
+                                                                    @((float)System.Math.Round(item.EndDateTime.Subtract(item.StartDateTime).TotalHours, 2))h
+                                                                </span>
+                                                            }
+                                                        </div>
+                                                        @if (item.Meeting_Type.ToLower() == "virtual")
+                                                        {
+                                                            <div class="col-9 p-0 dashboard-text-color text-container">
+                                                                <a href="@item.Location" target="_blank" class="dashboard-text-color text-decoration-none"><span class="ellipsis"><i class="fa-solid fa-globe me-1" style="font-size:1.3rem"></i>@item.Location</span></a>
+                                                            </div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="col-9 p-0 dashboard-text-color text-container">
+                                                                <a href="https://www.google.com/maps/search/@item.Location" target="_blank" class=" dashboard-text-color text-decoration-none">
+                                                                    <span class="ellipsis">
+                                                                        <i class="fa-solid fa-location-dot me-1" style="font-size:1.3rem"></i>@item.Location
+                                                                    </span>
+                                                                </a>
+                                                            </div>
+
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            }
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="fw-bolder text-light">No Meeting Today</div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+@code {
+
+    public MeetingSchedulingApp.Model.ResponseModel.Dashboard dashboard = new();
+    [Inject]
+    HttpClient httpClient { get; set; }
     [Inject]
     private NavigationManager navigationManager { get; set; }
     protected override async Task OnInitializedAsync()
     {
+        dashboard = new();
         var user = await asp.GetAuthenticationStateAsync();
         if (!user.User.Identity.IsAuthenticated)
         {
             navigationManager.NavigateTo("/Accountlogin");
 
         }
-        
+        var Id = user.User.Claims.FirstOrDefault(s => s.Type == ClaimTypes.UserData);
+        var response = await httpClient.GetFromJsonAsync<StatusResponse<MeetingSchedulingApp.Model.ResponseModel.Dashboard>>($"api/Meeting/Dashboard/{Convert.ToInt32(Id.Value)}");
+        if (response.IsSuccess)
+        {
+            dashboard = response.Result;
+        }
+        else
+        {
+            ts.Toast($"{response.Message}", ToastLevel.Error, true);
+        }
+
 
     }
 }

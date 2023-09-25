@@ -86,6 +86,7 @@
         if (participant.User_Id != null && participant.Meeting_Id != null)
         {
             var response = await httpClient.PostAsJsonAsync<Participants>($"api/Participant", participant);
+
             if (response.IsSuccessStatusCode)
             {
                 participant = new();

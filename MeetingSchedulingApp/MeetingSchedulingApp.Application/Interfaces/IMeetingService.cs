@@ -15,5 +15,6 @@ namespace MeetingSchedulingApp.Application.Interfaces
         Task<Meetings> Get(int id);
         Task<IEnumerable<Meetings>> GetAll();
         Task<IEnumerable<Meetings>> GetAll(int id);
+        Task<IEnumerable<Meetings>> GetByDate(int id, bool isToday);
     }
 }

@@ -49,6 +49,30 @@ namespace MeetingSchedulingApp.Controller
         #endregion
 
         #region Get
+        [HttpGet("Dashboard/{id}")]
+        public async Task<IActionResult> GetDashboard(int id)
+        {
+            try
+            {
+
+                var today = await _meetingService.GetByDate(id, true);
+                var upcoming = await _meetingService.GetByDate(id,false);
+                var upcominggroup = upcoming.GroupBy(g => g.StartDateTime.ToString("D") );
+                List<MeetingGroupByDate> meetingGroups = new();
+                foreach(var group in upcominggroup)
+                {
+                    meetingGroups.Add(new() { scheduledDate = group.FirstOrDefault().StartDateTime, Meetings = group.ToList() });
+                }
+                return StatusCode(StatusCodes.Status200OK, new StatusResponse<Dashboard>() { IsSuccess = true, Message = "Api Execute Successfully", Result = new() { Upcoming = meetingGroups ,Today = today} });
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(StatusCodes.Status500InternalServerError, new StatusResponse<Dashboard>() { IsSuccess = false, Message = ex.Message });
+            }
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAll(int id)
         {
@@ -114,9 +138,7 @@ namespace MeetingSchedulingApp.Controller
                 return StatusCode(StatusCodes.Status500InternalServerError, new StatusResponse<Meetings>() { IsSuccess = false, Message = ex.Message });
             }
         }
-        #endregion
 
-        #region Update
         [HttpDelete("{id}")]
         public async Task<IActionResult> Put(int id)
         {

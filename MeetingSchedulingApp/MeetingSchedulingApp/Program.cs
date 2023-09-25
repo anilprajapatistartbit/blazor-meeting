@@ -1,6 +1,8 @@
 using MeetingSchedulingApp.Application.Implimentation;
 using MeetingSchedulingApp.Application.Interfaces;
 using MeetingSchedulingApp.Application.SmtpService;
+using MeetingSchedulingApp.Component;
+using MeetingSchedulingApp.Component.Notification;
 using MeetingSchedulingApp.Data;
 using MeetingSchedulingApp.Infrastructure;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -40,6 +42,7 @@ builder.Services.AddSingleton(new HttpClient { BaseAddress = new Uri(builder.Con
 
 builder.Services.Configure<EmailSetting>(builder.Configuration.GetSection("EmailSettings"));
 builder.Services.AddTransient<IEmailService, EmailService>();
+builder.Services.AddScoped<ToastService>();
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())

@@ -121,6 +121,18 @@ namespace MeetingSchedulingApp.Application.Implimentation
             }
 
         }
+        public async Task<Participants> CheckAlreadyInvited(int meetId, int userId)
+        {
+            try
+            {
+                return await _unitofwork.Participants.GetByExpression(s=>s.Meeting_Id ==meetId && s.User_Id == userId);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        
         #endregion
         #endregion
     }

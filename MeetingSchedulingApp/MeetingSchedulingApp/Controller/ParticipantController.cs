@@ -39,6 +39,23 @@ namespace MeetingSchedulingApp.Controller
                 return StatusCode(StatusCodes.Status500InternalServerError, new StatusResponse<Participants>() { IsSuccess = false, Message = ex.Message });
             }
         }
+
+        [HttpGet("check/{meetid}/{userid}")]
+        public async Task<IActionResult> GetAll(int meetid,int userid)
+        {
+            try
+            {
+
+                var result = await _participantService.CheckAlreadyInvited(meetid,userid);
+                return StatusCode(StatusCodes.Status200OK, new StatusResponse<Participants>() { IsSuccess = true, Message = "Api Execute Successfully", Result = result });
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(StatusCodes.Status500InternalServerError, new StatusResponse<Participants>() { IsSuccess = false, Message = ex.Message });
+            }
+        }
         #endregion
 
         #region Create Meeting Participants

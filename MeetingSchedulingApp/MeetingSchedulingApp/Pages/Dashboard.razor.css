@@ -1,0 +1,39 @@
+﻿.dashboard-text-color {
+    color: #154061;
+}
+.dashboard-bg-color {
+    background: #154061;
+}
+.dashboard-card{
+    padding :10px 25px;
+}
+.dash-border {
+    border: 1px solid #dedede;
+    border-radius:5px;
+}
+.dash-border-today {
+    border-radius: 5px;
+    border: 1px solid #2d9d9c;
+}
+.dashboard-today-bg {
+    background: #36bdbb;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 10px 0px inset, rgba(0, 0, 0, 0.06) 0px 4px 5px 0px inset, rgba(0, 0, 0, 0.07) 0px 2px 4px 0px inset;
+}
+
+.dashboard-card:hover div .row .col-10 {
+    background: #d6d5d5 !important;
+}
+.dashboard-card:hover{
+    filter:opacity(0.9);
+    cursor:pointer;
+}
+.text-container {
+    width: 68%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.ellipsis {
+    text-overflow: ellipsis; 
+}

@@ -1,6 +1,7 @@
 ﻿@page "/Registration"
 @using System.Web;
 @inject IJSRuntime js;
+@inject ToastService ts;
 <PageTitle>Register</PageTitle>
 <div class="">
     <div class="m-auto bg-white login-container p-4">
@@ -33,29 +34,29 @@
                 </div>
                 <div class="mt-2">
                     <lagend class="lagend-register">Address Information</lagend>
-                <div class="row m-2 register-row">
-                    <div class="col-12 col-md-4">
+                    <div class="row m-2 register-row">
+                        <div class="col-12 col-md-4">
                             <input type="text" class="form-control my-3" style="border-radius:8px !important" placeholder="Address Line 1" @bind-value="@users.AddressLine1" required>
 
-                    </div>
-                    <div class="col-12 col-md-4">
+                        </div>
+                        <div class="col-12 col-md-4">
                             <input type="text" class="form-control my-3" style="border-radius:8px !important" placeholder="Address Line 2" @bind-value="@users.AddressLine2">
-                    </div>
-                    <div class="col-12 col-md-4">
+                        </div>
+                        <div class="col-12 col-md-4">
                             <input type="text" class="form-control my-3" style="border-radius:8px !important" placeholder="City" @bind-value="@users.City" required>
-                    </div>
-                    <div class="col-12 col-md-4">
+                        </div>
+                        <div class="col-12 col-md-4">
                             <input type="text" class="form-control my-3" style="border-radius:8px !important" placeholder="State" @bind-value="@users.State" required>
-                    </div>
-                    <div class="col-12 col-md-4">
+                        </div>
+                        <div class="col-12 col-md-4">
                             <input type="text" class="form-control my-3" style="border-radius:8px !important" placeholder="Country" @bind-value="@users.Country" required>
-                    </div>
-                    <div class="col-12 col-md-4">
+                        </div>
+                        <div class="col-12 col-md-4">
                             <input type="text" class="form-control my-3" style="border-radius:8px !important" placeholder="Zip Code" @bind-value="@users.ZipCode" required>
+                        </div>
                     </div>
                 </div>
-                </div>
-               
+
                 <div class="row m-0">
                     <div class="col-12 col-md-6">
                         <input type="submit" value="REGISTER" style="border-radius:8px !important" class="form-control login-btn mt-2" />
@@ -77,17 +78,19 @@
     private NavigationManager navigationManager { get; set; }
     async Task onSumbit()
     {
-        var response = await httpClient.PostAsJsonAsync<Users>("api/User",users);
-
+        var response = await httpClient.PostAsJsonAsync<Users>("api/User", users);
+        var data = await response.Content.ReadFromJsonAsync<StatusResponse<Users>>();
         if (response.IsSuccessStatusCode)
         {
-            var data = await response.Content.ReadFromJsonAsync<AuthRespose>();
-            if (data.isAuthenticated)
+            if (data.IsSuccess)
             {
-               
+                ts.Toast(data.Message, ToastLevel.Success, true);
                 await js.InvokeVoidAsync("clientJsfunctions.RedirectTo", "/Accountlogin");
             }
         }
+
+        ts.Toast(data.Message, ToastLevel.Error, true);
+
         await js.InvokeVoidAsync("clientJsfunctions.RedirectTo", "/Accountlogin");
     }
 

@@ -1,7 +1,7 @@
 ﻿@inherits LayoutComponentBase
 
 <PageTitle>MeetingSchedulingApp</PageTitle>
-
+<Toast/>
 <AuthorizeView>
     <Authorized>
         <div class="page">
@@ -11,7 +11,7 @@
 
     <main>
         <div class="top-row px-4">
-                    <a href="/logout?returnUrl=/Registration" target="_blank">Register</a>
+                   @*<a href="/logout?returnUrl=/Registration" target="_blank">Register</a>*@
         </div>
 
         <article class="content px-4">
@@ -28,7 +28,6 @@
        </div>
     </NotAuthorized>
 </AuthorizeView>
-
 @code{
     public string sidebarclass = "sidebar";
     public bool isfull = false;

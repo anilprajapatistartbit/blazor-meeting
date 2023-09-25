@@ -15,6 +15,7 @@ namespace MeetingSchedulingApp.Application.Interfaces
         Task<Participants> Get(int id);
         Task<IEnumerable<Participants>> GetAll(int id);
         Task<IEnumerable<Participants>> GetAllByMeetingId(int id);
+        Task<Participants> CheckAlreadyInvited(int meetId, int userId);
 
     }
 }

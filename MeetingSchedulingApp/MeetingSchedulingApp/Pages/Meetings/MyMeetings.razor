@@ -28,42 +28,53 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in meetings.Select((Value, i) => (Value, i)))
+                @if(meetings.Count()>0){
+                    @foreach (var item in meetings.Select((Value, i) => (Value, i)))
+                    {
+                        <tr class="align-middle">
+                            <th class="py-0">@(item.i + 1)</th>
+                            <td class="py-0 td"><span>@item.Value.Title</span></td>
+                            <td class="py-0 td">
+                                @if (item.Value.Meeting_Type.ToLower() == "virtual")
+                                {
+                                    <a href="@item.Value.Location" target="_blank"><i class="fa-solid fa-globe me-1 text-default"></i>@item.Value.Location</a>
+                                }
+                                else
+                                {
+                                    <a href="https://www.google.com/maps/search/@item.Value.Location" target="_blank"><i class="fa-solid fa-location-dot text-default me-2"></i>@item.Value.Location</a>
+
+                                }
+                            </td>
+                            <td class="py-0 td"><span>@item.Value.StartDateTime.ToString("g")</span></td>
+                            <td class="py-0 td">
+                                <span>
+                                    @item.Value.EndDateTime.ToString("g")
+                                </span>
+                            </td>
+                            <td class="py-0 td"><span>@item.Value.Meeting_Type</span></td>
+                            <td class="py-0 td"><span class="badge bg-@(item.Value.Status=="pending" ? "warning" :item.Value.Status=="started" ? "primary":item.Value.Status=="completed" ? "success":"danger")">@item.Value.Status?.ToUpper()</span></td>
+                            <td class="py-0 td-action">
+
+                                <button class="btn btn-sm btn-info m-1" @onclick=@(args=>RedirectTo($"/mymeetings/{item.Value.Id}")) style="font-size:10px;"><i class="fa-solid fa-pencil"></i></button>
+
+                                <button class="btn btn-sm btn-info m-1" @onclick=@(args=>ModalOpen(true,item.Value.Id,true)) style="font-size:10px;"><i class="fa-solid fa-plus"></i></button>
+                                @if (item.Value.Status != "started" && item.Value.Status != "completed")
+                                {
+                                    <button class="btn btn-sm btn-danger m-1" @onclick=@(args=>ModalOpen(true,item.Value.Id,false)) style="font-size:10px;"><i class="fa-solid fa-x"></i></button>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+                else
                 {
-                    <tr class="align-middle">
-                        <th class="py-0">@(item.i + 1)</th>
-                        <td class="py-0 td"><span>@item.Value.Title</span></td>
-                        <td class="py-0 td">
-                            @if (item.Value.Meeting_Type.ToLower() == "virtual")
-                            {
-                                <a href="@item.Value.Location" target="_blank"><i class="fa-solid fa-globe me-1 text-default"></i>@item.Value.Location</a>
-                            }
-                            else
-                            {
-                                <a href="https://www.google.com/maps/search/@item.Value.Location" target="_blank"><i class="fa-solid fa-location-dot text-default me-2"></i>@item.Value.Location</a>
-
-                            }
-                        </td>
-                        <td class="py-0 td"><span>@item.Value.StartDateTime.ToString("g")</span></td>
-                        <td class="py-0 td">
-                            <span>
-                                @item.Value.EndDateTime.ToString("g")
-                            </span>
-                        </td>
-                        <td class="py-0 td"><span>@item.Value.Meeting_Type</span></td>
-                        <td class="py-0 td"><span class="badge bg-@(item.Value.Status=="pending" ? "warning" :item.Value.Status=="started" ? "primary":item.Value.Status=="completed" ? "success":"danger")">@item.Value.Status?.ToUpper()</span></td>
-                        <td class="py-0 td-action">
-
-                            <button class="btn btn-sm btn-info m-1" @onclick=@(args=>RedirectTo($"/mymeetings/{item.Value.Id}")) style="font-size:10px;"><i class="fa-solid fa-pencil"></i></button>
-
-                            <button class="btn btn-sm btn-info m-1" @onclick=@(args=>ModalOpen(true,item.Value.Id,true)) style="font-size:10px;"><i class="fa-solid fa-plus"></i></button>
-                            @if (item.Value.Status != "started" && item.Value.Status != "completed")
-                            {
-                                <button class="btn btn-sm btn-danger m-1" @onclick=@(args=>ModalOpen(true,item.Value.Id,false)) style="font-size:10px;"><i class="fa-solid fa-x"></i></button>
-                            }
+                    <tr>
+                        <td colspan="8" align="center">
+                            Data not availbale
                         </td>
                     </tr>
                 }
+               
             </tbody>
         </table>
 

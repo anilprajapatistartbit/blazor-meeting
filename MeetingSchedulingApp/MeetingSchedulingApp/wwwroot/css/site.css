@@ -76,3 +76,12 @@ body::-webkit-scrollbar-thumb {
     background-color: darkgrey;
     outline: 1px solid slategrey;
 }
+
+.card {
+    height: 85vh !important;
+    overflow-y: auto !important;
+}
+.nav-custom {
+    height: 80vh !important;
+    overflow-y: auto !important;
+}

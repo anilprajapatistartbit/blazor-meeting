@@ -109,7 +109,27 @@ namespace MeetingSchedulingApp.Application.Implimentation
             }
 
         }
-            
+
+        public async Task<IEnumerable<Meetings>> GetByDate(int id, bool isToday)
+        {
+            try
+            {
+                if(isToday==true)
+                {
+                    return (await _unitofwork.Participants.GetAllByExpression(s=>((s.User_Id== id && s.Status.ToLower()=="accept" )||(s.Meeting.Host_Id==id )) && (s.Meeting.StartDateTime.Day == DateTime.Today.Day && DateTime.Today.Month == s.Meeting.StartDateTime.Month && DateTime.Today.Year == s.Meeting.StartDateTime.Year))).Select(s=>s.Meeting).Distinct();
+                }
+
+                var data = await _unitofwork.Participants.GetAllByExpression(s =>
+                ((s.User_Id == id && s.Status.ToLower() == "accept") || (s.Meeting.Host_Id == id))
+                && (s.Meeting.StartDateTime >= DateTime.Today.AddDays(1) && s.Meeting.StartDateTime <= DateTime.Today.AddDays(7)));
+                return data.Select(s => s.Meeting).Distinct(); ;
+            }
+            catch
+            {
+                throw;
+            }
+            }
+
             #endregion
 
 
